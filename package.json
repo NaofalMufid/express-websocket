@@ -1,0 +1,26 @@
+{
+  "name": "socket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "start": "NODE_ENV=development ./node_modules/.bin/env-cmd -f ../.env nodemon -r tsconfig-paths/register index.ts",
+    "invock": "NODE_ENV=development ./node_modules/.bin/env-cmd -f ../.env nodemon -r tsconfig-paths/register ./lambda/backup-db-s3.ts",
+    "start:dynamo": "./node_modules/.bin/serverless dynamodb start --migrate",
+    "start:sls": "node --max_old_space_size=4096 ./node_modules/.bin/serverless offline -o 0.0.0.0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "serverless-dynamodb-local": "0.2.30",
+    "serverless-offline": "^8.7.0",
+    "ws": "^8.6.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "2.636.0",
+    "cors": "^2.8.5",
+    "serverless-dotenv-plugin": "2.1.1",
+    "serverless-http": "^3.0.1"
+  }
+}

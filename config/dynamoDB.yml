@@ -1,0 +1,54 @@
+topicSubscribersTable:
+  Type: AWS::DynamoDB::Table
+  DeletionPolicy: "Retain"
+  Properties:
+    TableName: socket-topics
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+    AttributeDefinitions:
+      - AttributeName: topic
+        AttributeType: S
+      - AttributeName: connectionId
+        AttributeType: S
+    KeySchema:
+      - AttributeName: topic
+        KeyType: HASH
+      - AttributeName: connectionId
+        KeyType: RANGE
+    TimeToLiveSpecification:
+      AttributeName: "ttl"
+      Enabled: true
+    GlobalSecondaryIndexes:
+      - IndexName: reverse
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+          - AttributeName: topic
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+subscriptionEventsTable:
+  Type: AWS::DynamoDB::Table
+  DeletionPolicy: "Retain"
+  Properties:
+    TableName: events-table
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+    AttributeDefinitions:
+      - AttributeName: topic
+        AttributeType: S
+      - AttributeName: id
+        AttributeType: S
+    KeySchema:
+      - AttributeName: topic
+        KeyType: HASH
+      - AttributeName: id
+        KeyType: RANGE
+    StreamSpecification:
+      StreamViewType: NEW_IMAGE

@@ -1,0 +1,77 @@
+service: dattabot-emeterai-sls-ws
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+provider:
+  name: aws
+  region: ${opt:region, 'ap-southeast-1'}
+  runtime: nodejs12.x
+  deploymentBucket:
+    name: dipikul-serverless
+    blockPublicAccess: true
+  stage: ${opt:stage, 'dev'}
+  tags:
+    Name: Emeterai
+    Project: dattabot-emeterai-sls-ws
+    Stage: ${self:provider.stage}
+  stackTags:
+    Name: Emeterai
+    Project: dattabot-emeterai-sls-ws
+    Stage: ${self:provider.stage}
+  timeout: 30
+  memorySize: 512
+  # role: LambdaRole
+  versionFunctions: false
+
+custom:
+  dynamodb:
+    stages: ${opt:stage, 'dev'}
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      convertEmptyValues: true
+package:
+  individually: true
+  exclude:
+    - "./dynamodb"
+    - "./serverless"
+
+resources:
+  - Resources: ${file(./config/dynamoDB.yml)}
+  # - Resources: ${file(./config/lambdaRoles.yml)}
+
+functions:
+  edshttp:
+    handler: lambda/websocket.httpHandler
+    role: arn:aws:iam::115757617537:role/eds-dev-edshttp-roles
+    events:
+      - http:
+          path: web_notification
+          method: POST
+  websocket:
+    handler: lambda/websocket.handler
+    role: arn:aws:iam::115757617537:role/eds-dev-websocket-roles
+    events:
+      - websocket:
+          route: $connect
+      - websocket:
+          route: $disconnect
+      - websocket:
+          route: $default
+  publish:
+    handler: lambda/publish.handler
+    role: arn:aws:iam::115757617537:role/eds-publish-dev-roles
+    events:
+      - stream:
+          type: dynamodb
+          batchSize: 1
+          startingPosition: LATEST
+          arn: !GetAtt
+            - subscriptionEventsTable
+            - StreamArn
