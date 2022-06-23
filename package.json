@@ -10,14 +10,14 @@
     "start:sls": "node --max_old_space_size=4096 ./node_modules/.bin/serverless offline -o 0.0.0.0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "ws": "^8.6.0"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "2.636.0",
-    "cors": "^2.8.5",
-    "serverless-dotenv-plugin": "2.1.1"
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "serverless-dotenv-plugin": "2.1.1",
+    "ws": "^8.6.0"
   }
 }
