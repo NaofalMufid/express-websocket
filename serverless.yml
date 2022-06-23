@@ -1,9 +1,9 @@
 service: dattabot-emeterai-sls-ws
 
 plugins:
-  - serverless-dynamodb-local
+  # - serverless-dynamodb-local
   - serverless-dotenv-plugin
-  - serverless-offline
+  # - serverless-offline
 
 provider:
   name: aws

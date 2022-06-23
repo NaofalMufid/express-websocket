@@ -116,7 +116,7 @@ const follow = async (connectionId, topic, subscriptionId) => {
             subscriptionId,
             ttl: typeof ttl === 'number' ? ttl : Math.floor(Date.now() / 1000) + 60 * 60 * 2,
           },
-          TableName: topics_table,
+          TableName: process.env.TOPICS_TABLE,
         })
         .promise();
 
