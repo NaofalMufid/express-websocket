@@ -1,5 +1,5 @@
 const dynamoDBClient = require('../utils/dynamodb');
-const Client = require('./client');
+const {Client} = require('./client');
 
 class Topic {
   topic;
