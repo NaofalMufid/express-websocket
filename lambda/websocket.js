@@ -62,7 +62,12 @@ exports.handler = async (event) => {
             const topic = body.topic;
 
             if (body.type === 'subscribe') {
-                follow(connectionId, topic);
+                await connection.subscribe({topic});
+                console.log(`Client subscribing for topic: ${topic}`);
+            }
+
+            if (body.type === 'follow') {
+                await follow(connectionId, topic);
                 console.log(`Client subscribing for topic: ${topic}`);
             }
 
@@ -70,6 +75,11 @@ exports.handler = async (event) => {
                 await new Topic(topic).publishMessage({ data: body.message });
                 console.error(`Published messages to subscribers`);
                 return response;
+            }
+            
+            if (body.type === 'getConnectionId') {
+                await connection.getConnId();
+                console.log(`Client subscribing for topic: ${topic}`);
             }
 
             if (body.type === 'stop') {

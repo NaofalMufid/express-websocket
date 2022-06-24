@@ -99,6 +99,21 @@ class Client {
       topic: 'INITIAL_CONNECTION',
     });
   }
+
+  async getConnId(){
+    const gatewayClient = new ApiGatewayManagementApi({
+      apiVersion: '2018-11-29',
+      endpoint: endpoint,
+    });
+
+    const response = await gatewayClient
+      .postToConnection({
+        ConnectionId: this.connectionId,
+        Data: JSON.stringify({connectionId: this.connectionId}),
+      })
+      .promise();
+    return response  
+  }
 }
 
 const follow = async (connectionId, topic, subscriptionId) => {
