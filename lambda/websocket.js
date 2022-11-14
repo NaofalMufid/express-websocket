@@ -9,7 +9,7 @@ exports.httpHandler = async (event) => {
     };
     let body = JSON.parse(event.body)
     let topic
-    console.info(body['receiver'])
+    console.info("isi body connectionId", body['receiver'])
     // set connectionId
     if (!event.body && !body.receiver) {
         return { statusCode: 500, body: JSON.stringify({ "message": "`receiver` parameter required" }) };
@@ -68,7 +68,12 @@ exports.handler = async (event) => {
 
             if (body.type === 'follow') {
                 await follow(connectionId, topic);
-                console.log(`Client subscribing for topic: ${topic}`);
+                console.log(`Client follow for topic: ${topic}`);
+            }
+
+            if (body.type === 'following') {
+                await connection.follow(topic);
+                console.log(`Client following for topic: ${topic}`);
             }
 
             if (body.type === 'message') {
@@ -79,7 +84,7 @@ exports.handler = async (event) => {
             
             if (body.type === 'getConnectionId') {
                 await connection.getConnId();
-                console.log(`Client subscribing for topic: ${topic}`);
+                console.log(`Client get connectionId`);
             }
 
             if (body.type === 'stop') {
