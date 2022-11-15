@@ -20,6 +20,27 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
       run: npm install
+    - name: Create env file
+      run: |
+        touch .env
+        echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
+        echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+        echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
+        echo STAGE=${{ secrets.STAGE }} >> .env
+        echo PUBLISH_ENDPOINT=${{ secrets.PUBLISH_ENDPOINT }} >> .env
+        echo REGION=${{ secrets.REGION }} >> .env
+        echo TOPICS_TABLE=${{ secrets.TOPICS_TABLE }} >> .env
+        echo EVENTS_TABLE=${{ secrets.EVENTS_TABLE }}  >> .env
+        cat .env
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        NODE_ENV: ${{ secrets.NODE_ENV }}
+        STAGE: ${{ secrets.STAGE }}
+        PUBLISH_ENDPOINT: ${{ secrets.PUBLISH_ENDPOINT }}
+        REGION: ${{ secrets.REGION }}
+        TOPICS_TABLE: ${{ secrets.TOPICS_TABLE }}
+        EVENTS_TABLE: ${{ secrets.EVENTS_TABLE }}
     - name: serverless deploy
       uses: serverless/github-action@master
       with:
@@ -27,3 +48,6 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        NODE_ENV: ${{ secrets.NODE_ENV }}
+        STAGE: ${{ secrets.STAGE }}
+        REGION: ${{ secrets.REGION }}

@@ -34,7 +34,7 @@ custom:
       inMemory: true
       heapInitial: 200m
       heapMax: 1g
-      migrate: true
+      # migrate: true
       convertEmptyValues: true
 package:
   individually: true
@@ -43,7 +43,7 @@ package:
     - "./serverless"
 
 resources:
-  - Resources: ${file(./config/dynamoDB.yml)}
+  # - Resources: ${file(./config/dynamoDB.yml)}
   # - Resources: ${file(./config/lambdaRoles.yml)}
 
 functions:
